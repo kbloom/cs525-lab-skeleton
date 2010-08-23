@@ -1,3 +1,7 @@
+%{
+#include <stdio.h>
+void yyerror(const char *);
+%}
 %token SELECT
 %token FROM
 %token WHERE
@@ -70,3 +74,6 @@ STATEMENT   : SELECT_S
 
 %%
 
+void yyerror (const char *s){
+   fprintf(stderr, "%s\n", s);
+}

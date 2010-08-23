@@ -1,10 +1,11 @@
 %{
 #include "sql.tab.h"
-#undef	yygetc()
+#undef	yygetc
 #define	yygetc()	tolower( getc(yyin) )
 %}
 %option bison-bridge
 %option ansi-prototypes
+%option noyywrap
 
 %%
 
@@ -24,8 +25,8 @@ hit                  return HIT;
 rate                 return RATE;
 set                  return SET;
 timer                return TIMER;
-on                   {yylval.intVal = 1;  return BOOLEAN;}
-off                  {yylval.intVal = 0;  return BOOLEAN;}
+on                   {yylval->intVal = 1;  return BOOLEAN;}
+off                  {yylval->intVal = 0;  return BOOLEAN;}
 commit               return COMMIT;
 exit                 return EXIT;
 quit                 return EXIT;
@@ -34,14 +35,14 @@ quit                 return EXIT;
 ">"                  |
 "<="                 |
 ">="                 |
-"!="                 {yylval.stringVal = strdup(yytext); return OPERATOR;}
+"!="                 {yylval->stringVal = strdup(yytext); return OPERATOR;}
 "("                  return *yytext;
 ")"                  return *yytext;
 ";"                  return *yytext;
 ","                  return *yytext;
 "*"		     return *yytext;
-[a-z][a-z0-9]*	     {yylval.stringVal = strdup(yytext); return IDENTIFIER;}
-[0-9]+               {yylval.intVal = atoi(yytext); return NUMBER;}
+[a-z][a-z0-9]*	     {yylval->stringVal = strdup(yytext); return IDENTIFIER;}
+[0-9]+               {yylval->intVal = atoi(yytext); return NUMBER;}
 [ \t]                {}
 .                    {yyerror("Unknown Character");}
 
