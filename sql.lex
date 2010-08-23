@@ -1,7 +1,10 @@
 %{
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "sql.tab.h"
-#undef	yygetc
-#define	yygetc()	tolower( getc(yyin) )
+void yyerror(const char *);
+char *strdup(const char *s);
 %}
 %option bison-bridge
 %option ansi-prototypes

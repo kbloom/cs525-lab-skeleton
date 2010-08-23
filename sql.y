@@ -1,7 +1,16 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 void yyerror(const char *);
+int yylex(void);
 %}
+
+%union{
+   char* stringVal;
+   int intVal;
+}
+
 %token SELECT
 %token FROM
 %token WHERE
@@ -21,20 +30,19 @@ void yyerror(const char *);
 %token BOOLEAN
 %token COMMIT
 %token EXIT
-%token EXIT
 %token <stringVal> OPERATOR
 %token <stringVal> IDENTIFIER
 %token <intVal> NUMBER
 
-%union{
-   char* stringVal;
-   int intVal;
-}
+%type <stringVal> ID_LIST
+%type <stringVal> S_FIELDS
+
+%start STATEMENT
 
 %%
 
-ID_LIST	    : IDENTIFIER
-	    | IDENTIFIER ',' ID_LIST
+ID_LIST	    : IDENTIFIER  { $$ = "id_list_1" }
+            | IDENTIFIER ',' ID_LIST { $$ = "id_list_2" }
             ;
 NUM_LIST    : NUMBER
 	    | NUMBER ',' NUM_LIST
@@ -45,10 +53,10 @@ CONDITION   : IDENTIFIER OPERATOR IDENTIFIER
 COND_LIST   : CONDITION
 	    | CONDITION AND COND_LIST
 	    ;
-S_FIELDS    : ID_LIST
-	    | '*'
+S_FIELDS    : ID_LIST {$$ = "s_fields" }
+	    | '*' { $$ = "s_fields_2"}
             ;
-SELECT_S    : SELECT S_FIELDS FROM IDENTIFIER
+SELECT_S    : SELECT S_FIELDS FROM IDENTIFIER                   {abort(); printf("selectfrom %s\n", $4);}
 	    | SELECT S_FIELDS FROM IDENTIFIER WHERE COND_LIST
 	    ;
 INSERT_S    : INSERT INTO IDENTIFIER VALUES '(' NUM_LIST ')'
@@ -64,13 +72,13 @@ VARIABLE    : TIMER
 	    ;
 SET_S       : SET VARIABLE BOOLEAN
 	    ;
-STATEMENT   : SELECT_S
-	    | INSERT_S
-	    | CREATE_S
-            | PRINT_S
-            | SET_S
-            | COMMIT
-            | EXIT
+STATEMENT   : SELECT_S ';'
+	    | INSERT_S ';'
+	    | CREATE_S ';'
+            | PRINT_S ';'
+            | SET_S ';'
+            | COMMIT ';'
+            | EXIT ';'
 
 %%
 
