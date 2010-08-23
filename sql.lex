@@ -6,6 +6,7 @@
 %option bison-bridge
 %option ansi-prototypes
 %option noyywrap
+%option yy_scan_string
 
 %%
 
