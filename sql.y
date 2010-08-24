@@ -105,13 +105,13 @@ NOPARAM_S   : PRINT CATALOG				        { $$ = CMD_PRINT_CATALOG }
 	    | COMMIT					        { $$ = CMD_COMMIT }
 	    | EXIT                                              { $$ = CMD_EXIT }
             ;
-STATEMENT   : SELECT_S ';'				        { $$ = newStatement(); $$->select=$1;}
-	    | INSERT_S ';'                                      { $$ = newStatement(); $$->insert=$1;}
-	    | CREATE_T_S ';'                                    { $$ = newStatement(); $$->createTable=$1;}
-	    | DROP_T_S ';'                                      { $$ = newStatement(); $$->dropTable=$1;}
-	    | PRINT_T_S ';'				        { $$ = newStatement(); $$->printTable=$1;}
-            | SET_S ';'                                         { $$ = newStatement(); $$->set=$1;}
-            | NOPARAM_S ';'                                     { $$ = newStatement(); $$->parameterless=$1;}
+STATEMENT   : SELECT_S ';'				        { returned_statement = newStatement(); returned_statement->select=$1;}
+	    | INSERT_S ';'                                      { returned_statement = newStatement(); returned_statement->insert=$1;}
+	    | CREATE_T_S ';'                                    { returned_statement = newStatement(); returned_statement->createTable=$1;}
+	    | DROP_T_S ';'                                      { returned_statement = newStatement(); returned_statement->dropTable=$1;}
+	    | PRINT_T_S ';'				        { returned_statement = newStatement(); returned_statement->printTable=$1;}
+            | SET_S ';'                                         { returned_statement = newStatement(); returned_statement->set=$1;}
+            | NOPARAM_S ';'                                     { returned_statement = newStatement(); returned_statement->parameterless=$1;}
 	    ;
 %%
 
