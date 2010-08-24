@@ -90,7 +90,7 @@ ID_LIST	    : IDENTIFIER				        { $$ = new_id_list($1)}
 NUM_LIST    : NUMBER					        { $$ = new_num_list($1)}
 	    | NUMBER ',' NUM_LIST                               { $$ = new_num_list($1); $$->next = $3}
             ;
-CONDITION   : IDENTIFIER OPERATOR IDENTIFIER              	{ $$ = new_condition($1,$2,$3,0xDEADBEEF) }
+CONDITION   : IDENTIFIER OPERATOR IDENTIFIER              	{ $$ = new_condition($1,$2,$3,195195195) }
 	    | IDENTIFIER OPERATOR NUMBER                        { $$ = new_condition($1,$2,NULL,$3) }
             ;
 COND_LIST   : CONDITION                                         { $$ = $1 }
