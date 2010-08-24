@@ -1,5 +1,11 @@
+#define SQL_PARSER_INTERNAL
 #include "ast.h"
 #include <stdlib.h>
+#include <ctype.h>
+#include "sql.tab.h"
+#include "sql.lex.h"
+
+int yyparse(void);
 
 statement_t* returned_statement;
 
@@ -54,7 +60,7 @@ num_list_t* newNumList(int num){
    i->next=NULL;
    return i;
 }
-condition_t* newCondition(char* left_col, char* op, char* right_col, int num){
+condition_t* newCondition(char* left_col, char* op, char* right_col, int right_num){
    condition_t* i=malloc(sizeof(condition_t));
    i->left_col=left_col;
    i->op=op;
@@ -118,7 +124,7 @@ void freeNumList(num_list_t* i){
    }
 }
 void freeCondition(condition_t * i){
-   num_list_t* temp;
+   condition_t* temp;
    while(i){
       temp=i->next;
       free(i->left_col);
@@ -133,7 +139,7 @@ void freeSelectStatement(select_statement_t* i){
    freeIdList(i->fields);
    free(i->table);
    freeCondition(i->conditions);
-   free(i)
+   free(i);
 }
 void freeInsertStatement(insert_statement_t* i){
    if(!i) return;
