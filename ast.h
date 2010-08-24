@@ -13,7 +13,7 @@ typedef struct id_t{
  * A singly-linked list of numbers.
  */
 typedef struct num_t{
-   int id;
+   int num;
    struct num_t* next;
 } num_t;
 
@@ -70,7 +70,7 @@ typedef struct create_statement_t{
    /// the name of the table to create
    char* table;
    /// a singly-list of column names
-   id_t columns;
+   id_t* columns;
 } create_statement_t;
 
 /**
@@ -110,15 +110,16 @@ typedef struct statement_t{
    parameterless_statement_t parameterless;
 } statement_t;
 
+
 /**
  * Returns the length of an identifier list
  */
-int lengthId(id_t *);
+int lengthId(const id_t *);
 
 /**
  * Returns the length of a list of numbers
  */
-int lengthNum(num_t*);
+int lengthNum(const num_t*);
 
 /**
  * Frees a parsed SQL statement, and all of the objects created inside it.
@@ -126,6 +127,11 @@ int lengthNum(num_t*);
  * you call strdup() on them (or copy them to a std::string) and save the duplicate.
  */
 void freeStatement(statement_t* stmt);
+
+/**
+ * This is the main entry point for the parser 
+ */
+statement_t * parseStatement(char * stmt);
 
 #ifdef SQL_PARSER_INTERNAL
 // CS-525 students don't need to ever call these
@@ -146,6 +152,9 @@ void freeSelectStatement(select_statement_t*);
 void freeInsertStatement(insert_statement_t*);
 void freeCreateStatement(create_statement_t*);
 void freeSetStatement(set_statement_t*);
+
+// the statement returned by parsing a single line of SQL
+extern statement_t* returned_statement;
 #endif
 
 #endif

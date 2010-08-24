@@ -75,7 +75,7 @@ ID_LIST	    : IDENTIFIER				        { $$ = newId($1)}
 NUM_LIST    : NUMBER					        { $$ = newNum($1)}
 	    | NUMBER ',' NUM_LIST                               { $$ = newNum($1); $$->next = $3}
             ;
-CONDITION   : IDENTIFIER OPERATOR IDENTIFIER              	{ $$ = newCondition($1,$2,$3,0) }	 
+CONDITION   : IDENTIFIER OPERATOR IDENTIFIER              	{ $$ = newCondition($1,$2,$3,0xDEADBEEF) }
 	    | IDENTIFIER OPERATOR NUMBER                        { $$ = newCondition($1,$2,NULL,$3) }
             ;
 COND_LIST   : CONDITION                                         { $$ = $1 }
