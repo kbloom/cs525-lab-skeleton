@@ -1,13 +1,20 @@
-#include <readline/readline.h>
-#include <readline/history.h>
 #include "parser.h"
 #include "print.h"
+#define _GNU_SOURCE
 #include <stdio.h>
+#include <stdlib.h>
+
+//consider using the GNU Readline library instead of myreadline()
+//it has a similar interface, and you'll get nice features like working
+//cursor keys and (if initialized properly) history.
+//run "man 3 readline" for more information
+char* myreadline(char* prompt);
 
 int main(int argc, char** argv){
-   char* input;
+   char* input=NULL;
    statement_t* parsed=NULL;
-   while ( (input = readline(">> ")) != 0 ){
+   int stillrunning=1;
+   while (stillrunning &&  (input=myreadline(">> ")) != 0){
       parsed=parse_statement(input);
       if (parsed){
 	 /* parse succeded. determine which command was run */
@@ -39,14 +46,24 @@ int main(int argc, char** argv){
 	    printf("commit;\n");
 	 if(parsed->parameterless == CMD_EXIT){
 	    printf("exit;\n");
-	    break;
+	    stillrunning=0;
 	 }
       }else{
 	 /* There was a syntax error, and the parser has already 
 	  * printed an error message, so nothing to do here.*/
       }
-      free_statement(parsed);
-      parsed=NULL;
+      free(input);            input=NULL;
+      free_statement(parsed); parsed=NULL;
    }
-   free_statement(parsed);
 }
+
+char* myreadline(char* prompt){
+   char* input=NULL;
+   size_t inputlength=0;
+   printf("%s",prompt);
+   if (getline(&input,&inputlength,stdin)!=-1)
+      return input;
+   else
+      return input;
+}
+

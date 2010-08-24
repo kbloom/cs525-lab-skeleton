@@ -1,6 +1,6 @@
 CFLAGS=-g -std=c99
 parser:	sql.tab.o lex.yy.o main.o parser.o print.o
-	$(CC) $(CFLAGS) $^ -o parser -lreadline
+	$(CC) $(CFLAGS) $^ -o parser
 
 sql.tab.c sql.tab.h: sql.y
 	bison --defines sql.y
