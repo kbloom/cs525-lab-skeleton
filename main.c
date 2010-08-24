@@ -1,5 +1,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "ast.h"
 #include "sql.tab.h"
 #include "sql.lex.h"
 extern int yydebug;

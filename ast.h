@@ -74,6 +74,43 @@ typedef struct create_statement_t{
 } create_statement_t;
 
 /**
+ *  This enum defines a bunch of commands that take no parameters.
+ *  If the parser found some command not listed here, then the type
+ *  CMD_NONE is used to indicate that none of the parameterless commands should
+ *  be run.
+ */
+typedef enum parameterless_statement_t{
+   CMD_NONE=0,
+   CMD_PRINT_CATALOG,
+   CMD_PRINT_BUFFER,
+   CMD_PRINT_HIT_RATE,
+   CMD_COMMIT,
+   CMD_EXIT
+} parameterless_statement_t;
+
+enum variable_t{
+   CONFIG_TIMER
+};
+
+typedef enum variable_t variable_t;
+
+typedef struct set_statement_t{
+   variable_t variable;
+   //value is a boolean -- 0 means "off" and nonzero means "on"
+   int value;
+} set_statement_t;
+
+typedef struct statement_t{
+   select_statement_t* select;
+   create_statement_t* createTable;
+   insert_statement_t* insert;
+   char* dropTable;   
+   char* printTable;
+   set_statement_t* set;
+   parameterless_statement_t parameterless;
+} statement_t;
+
+/**
  * Returns the length of an identifier list
  */
 int lengthId(id_t *);
@@ -83,6 +120,13 @@ int lengthId(id_t *);
  */
 int lengthNum(num_t*);
 
+/**
+ * Frees a parsed SQL statement, and all of the objects created inside it.
+ * This includes all strings created in side it. If you want to use them persistently,
+ * you call strdup() on them (or copy them to a std::string) and save the duplicate.
+ */
+void freeStatement(statement_t* stmt);
+
 #ifdef SQL_PARSER_INTERNAL
 // CS-525 students don't need to ever call these
 id_t* newId(char* id);
@@ -91,7 +135,8 @@ condition_t* newCondition(char* left_col, char* op, char* right_col, int num);
 select_statement_t* newSelectStatement(id_t* fields, char* table, condition_t* conds);
 insert_statement_t* newInsertStatement(char* table, num_t* values);
 create_statement_t* newCreateStatement(char* table, id_t* columns);
-
+set_statement_t* newSetStatement(variable_t variable, int value);
+statement_t* newStatement(void);
 
 // CS-525 students don't need to ever call these
 void freeId(id_t *);
@@ -100,6 +145,7 @@ void freeCondition(condition_t *);
 void freeSelectStatement(select_statement_t*);
 void freeInsertStatement(insert_statement_t*);
 void freeCreateStatement(create_statement_t*);
+void freeSetStatement(set_statement_t*);
 #endif
 
 #endif

@@ -27,7 +27,7 @@ int yylex(void);
 %token SET
 %token DROP
 %token TIMER
-%token BOOLEAN
+%token <intVal> BOOLEAN
 %token COMMIT
 %token EXIT
 %token <stringVal> OPERATOR
@@ -43,6 +43,10 @@ int yylex(void);
    struct select_statement_t* selectStatement;
    struct create_statement_t* createStatement;
    struct insert_statement_t* insertStatement;
+   enum variable_t variable;
+   struct set_statement_t* setStatement;
+   enum parameterless_statement_t parameterlessStatement;
+   struct statement_t* statement;
 }
 
 %type <idList> ID_LIST
@@ -53,7 +57,12 @@ int yylex(void);
 %type <selectStatement> SELECT_S
 %type <createStatement> CREATE_T_S
 %type <insertStatement> INSERT_S
-
+%type <variable> VARIABLE
+%type <setStatement> SET_S
+%type <stringVal> DROP_T_S
+%type <stringVal> PRINT_T_S
+%type <parameterlessStatement> NOPARAM_S
+%type <statement> STATEMENT
 
 %start STATEMENT
 
@@ -82,26 +91,28 @@ INSERT_S    : INSERT INTO IDENTIFIER VALUES '(' NUM_LIST ')'    { $$ = newInsert
 	    ;
 CREATE_T_S  : CREATE TABLE IDENTIFIER '(' ID_LIST ')'           { $$ = newCreateStatement($3,$5) }
 	    ;
-DROP_T_S    : DROP TABLE IDENTIFIER
+DROP_T_S    : DROP TABLE IDENTIFIER                             { $$ = $3 }
 	    ;
-PRINT_S     : PRINT CATALOG
-	    | PRINT BUFFER
-            | PRINT HIT RATE
-            | PRINT TABLE IDENTIFIER
+PRINT_T_S   : PRINT TABLE IDENTIFIER			        { $$ = $3 }
+	    ;
+VARIABLE    : TIMER					        { $$ = CONFIG_TIMER }
+	    ;
+SET_S       : SET VARIABLE BOOLEAN			        { $$ = newSetStatement($2,$3) }
+	    ;
+NOPARAM_S   : PRINT CATALOG				        { $$ = CMD_PRINT_CATALOG }
+	    | PRINT BUFFER				        { $$ = CMD_PRINT_BUFFER }
+            | PRINT HIT RATE                                    { $$ = CMD_PRINT_HIT_RATE }
+	    | COMMIT					        { $$ = CMD_COMMIT }
+	    | EXIT                                              { $$ = CMD_EXIT }
             ;
-VARIABLE    : TIMER
+STATEMENT   : SELECT_S ';'				        { $$ = newStatement(); $$->select=$1;}
+	    | INSERT_S ';'                                      { $$ = newStatement(); $$->insert=$1;}
+	    | CREATE_T_S ';'                                    { $$ = newStatement(); $$->createTable=$1;}
+	    | DROP_T_S ';'                                      { $$ = newStatement(); $$->dropTable=$1;}
+	    | PRINT_T_S ';'				        { $$ = newStatement(); $$->printTable=$1;}
+            | SET_S ';'                                         { $$ = newStatement(); $$->set=$1;}
+            | NOPARAM_S ';'                                     { $$ = newStatement(); $$->parameterless=$1;}
 	    ;
-SET_S       : SET VARIABLE BOOLEAN
-	    ;
-STATEMENT   : SELECT_S ';'
-	    | INSERT_S ';'
-	    | CREATE_T_S ';'
-	    | DROP_T_S ';'
-            | PRINT_S ';'
-            | SET_S ';'
-            | COMMIT ';'
-            | EXIT ';'
-
 %%
 
 void yyerror (const char *s){
