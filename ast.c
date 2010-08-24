@@ -1,6 +1,8 @@
 #include "ast.h"
 #include <stdlib.h>
 
+statement_t* returned_statement;
+
 //user-visible functions
 int lengthIdList(const id_list_t *it){
    int i=0;
@@ -36,7 +38,6 @@ statement_t * parseStatement(char * input){
       return returned_statement;
    else
       return NULL;
-
 }
 
 
