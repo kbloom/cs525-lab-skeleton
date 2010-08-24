@@ -7,6 +7,7 @@ sql.tab.c sql.tab.h: sql.y
 lex.yy.c: sql.lex
 	flex --header-file=sql.lex.h sql.lex
 lex.yy.o: lex.yy.c sql.tab.h
+	$(CC) $(CFLAGS) -D_POSIX_SOURCE -c $<
 sql.tab.o: sql.tab.c sql.tab.h
 main.o: main.c sql.tab.h
 ast.o: ast.c ast.h
