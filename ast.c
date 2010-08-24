@@ -10,7 +10,7 @@ int yyparse(void);
 statement_t* returned_statement;
 
 //user-visible functions
-int lengthIdList(const id_list_t *it){
+int length_id_list(const id_list_t *it){
    int i=0;
    while(it){
       ++i;
@@ -18,7 +18,7 @@ int lengthIdList(const id_list_t *it){
    }
    return i;
 }
-int lengthNumList(const num_list_t *it){
+int length_num_list(const num_list_t *it){
    int i=0;
    while(it){
       ++i;
@@ -26,17 +26,17 @@ int lengthNumList(const num_list_t *it){
    }
    return i;
 }
-void freeStatement(statement_t* i){
+void free_statement(statement_t* i){
    if(!i) return;
-   freeSelectStatement(i->select);
-   freeCreateStatement(i->createTable);
-   freeInsertStatement(i->insert);
-   free(i->dropTable);
-   free(i->printTable);
-   freeSetStatement(i->set);
+   free_select_statement(i->select);
+   free_create_table_statement(i->create_table);
+   free_insert_statement(i->insert);
+   free(i->drop_table);
+   free(i->print_table);
+   free_set_statement(i->set);
    free(i);
 }
-statement_t * parseStatement(char * input){
+statement_t * parse_statement(char * input){
    char* t;
    for (t=input;*t;++t) *t=tolower(*t);
    yy_scan_string(input);
@@ -48,19 +48,19 @@ statement_t * parseStatement(char * input){
 
 
 //internal parser functions
-id_list_t* newIdList(char* id){
+id_list_t* new_id_list(char* id){
    id_list_t* i=malloc(sizeof(id_list_t));
    i->id=id;
    i->next=NULL;
    return i;
 }
-num_list_t* newNumList(int num){
+num_list_t* new_num_list(int num){
    num_list_t* i=malloc(sizeof(num_list_t));
    i->num=num;
    i->next=NULL;
    return i;
 }
-condition_t* newCondition(char* left_col, char* op, char* right_col, int right_num){
+condition_t* new_condition(char* left_col, char* op, char* right_col, int right_num){
    condition_t* i=malloc(sizeof(condition_t));
    i->left_col=left_col;
    i->op=op;
@@ -69,44 +69,44 @@ condition_t* newCondition(char* left_col, char* op, char* right_col, int right_n
    i->next=NULL;
    return i;
 }
-select_statement_t* newSelectStatement(id_list_t* fields, char* table, condition_t* conds){
+select_statement_t* new_select_statement(id_list_t* fields, char* table, condition_t* conds){
    select_statement_t* i=malloc(sizeof(select_statement_t));
    i->fields=fields;
    i->table=table;
    i->conditions=conds;
    return i;
 }
-insert_statement_t* newInsertStatement(char* table, num_list_t* values){
+insert_statement_t* new_insert_statement(char* table, num_list_t* values){
    insert_statement_t* i=malloc(sizeof(insert_statement_t));
    i->table=table;
    i->values=values;
    return i;
 }
-create_statement_t* newCreateStatement(char* table, id_list_t* columns){
-   create_statement_t* i=malloc(sizeof(create_statement_t));
+create_table_statement_t* new_create_table_statement(char* table, id_list_t* columns){
+   create_table_statement_t* i=malloc(sizeof(create_table_statement_t));
    i->table=table;
    i->columns=columns;
    return i;
 }
-set_statement_t* newSetStatement(variable_t variable, int value){
+set_statement_t* new_set_statement(variable_t variable, int value){
    set_statement_t* i=malloc(sizeof(set_statement_t));
    i->variable=variable;
    i->value=value;
    return i;
 }
-statement_t* newStatement(void){
+statement_t* new_statement(void){
    statement_t* i=malloc(sizeof(statement_t));
    i->select=NULL;
-   i->createTable=NULL;
+   i->create_table=NULL;
    i->insert=NULL;
-   i->dropTable=NULL;   
-   i->printTable=NULL;
+   i->drop_table=NULL;   
+   i->print_table=NULL;
    i->set=NULL;
    i->parameterless=CMD_NONE;
    return i;
 }
 
-void freeIdList(id_list_t *i){
+void free_id_list(id_list_t *i){
    id_list_t* temp;
    while(i){
       temp=i->next;
@@ -115,7 +115,7 @@ void freeIdList(id_list_t *i){
       i=temp;
    }
 }
-void freeNumList(num_list_t* i){
+void free_num_list(num_list_t* i){
    num_list_t* temp;
    while(i){
       temp=i->next;
@@ -123,7 +123,7 @@ void freeNumList(num_list_t* i){
       i=temp;
    }
 }
-void freeCondition(condition_t * i){
+void free_condition(condition_t * i){
    condition_t* temp;
    while(i){
       temp=i->next;
@@ -134,26 +134,26 @@ void freeCondition(condition_t * i){
       i=temp;
    }
 }
-void freeSelectStatement(select_statement_t* i){
+void free_select_statement(select_statement_t* i){
    if(!i) return;
-   freeIdList(i->fields);
+   free_id_list(i->fields);
    free(i->table);
-   freeCondition(i->conditions);
+   free_condition(i->conditions);
    free(i);
 }
-void freeInsertStatement(insert_statement_t* i){
+void free_insert_statement(insert_statement_t* i){
    if(!i) return;
    free(i->table);
-   freeNumList(i->values);
+   free_num_list(i->values);
    free(i);
 }
-void freeCreateStatement(create_statement_t* i){
+void free_create_table_statement(create_table_statement_t* i){
    if(!i) return;
    free(i->table);
-   freeIdList(i->columns);
+   free_id_list(i->columns);
    free(i);
 }
-void freeSetStatement(set_statement_t* i){
+void free_set_statement(set_statement_t* i){
    if(!i) return;
    free(i);
 }

@@ -45,7 +45,7 @@ void printInsertStatement(insert_statement_t* i){
    printf(");\n");
    
 }
-void printCreateStatement(create_statement_t* i){
+void printCreateStatement(create_table_statement_t* i){
    printf("create table %s (", i->table);
    printIdList(i->columns);
    printf(");\n");

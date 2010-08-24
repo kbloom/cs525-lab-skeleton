@@ -69,12 +69,12 @@ typedef struct insert_statement_t{
 /**
  * This holds all of the information that was in a CREATE TABLE statement.
  */
-typedef struct create_statement_t{
+typedef struct create_table_statement_t{
    /// the name of the table to create
    char* table;
    /// a singly-list of column names
    id_list_t* columns;
-} create_statement_t;
+} create_table_statement_t;
 
 /**
  *  This enum defines a bunch of commands that take no parameters.
@@ -105,10 +105,10 @@ typedef struct set_statement_t{
 
 typedef struct statement_t{
    select_statement_t* select;
-   create_statement_t* createTable;
+   create_table_statement_t* create_table;
    insert_statement_t* insert;
-   char* dropTable;   
-   char* printTable;
+   char* drop_table;   
+   char* print_table;
    set_statement_t* set;
    parameterless_statement_t parameterless;
 } statement_t;
@@ -117,44 +117,44 @@ typedef struct statement_t{
 /**
  * Returns the length of an identifier list
  */
-int lengthIdList(const id_list_t *);
+int length_id_list(const id_list_t *);
 
 /**
  * Returns the length of a list of numbers
  */
-int lengthNumList(const num_list_t*);
+int length_num_list(const num_list_t*);
 
 /**
  * Frees a parsed SQL statement, and all of the objects created inside it.
  * This includes all strings created in side it. If you want to use them persistently,
  * you call strdup() on them (or copy them to a std::string) and save the duplicate.
  */
-void freeStatement(statement_t* stmt);
+void free_statement(statement_t* stmt);
 
 /**
  * This is the main entry point for the parser 
  */
-statement_t * parseStatement(char * stmt);
+statement_t * parse_statement(char * stmt);
 
 #ifdef SQL_PARSER_INTERNAL
 // CS-525 students don't need to ever call these
-id_list_t* newIdList(char* id);
-num_list_t* newNumList(int num);
-condition_t* newCondition(char* left_col, char* op, char* right_col, int num);
-select_statement_t* newSelectStatement(id_list_t* fields, char* table, condition_t* conds);
-insert_statement_t* newInsertStatement(char* table, num_list_t* values);
-create_statement_t* newCreateStatement(char* table, id_list_t* columns);
-set_statement_t* newSetStatement(variable_t variable, int value);
-statement_t* newStatement(void);
+id_list_t* new_id_list(char* id);
+num_list_t* new_num_list(int num);
+condition_t* new_condition(char* left_col, char* op, char* right_col, int num);
+select_statement_t* new_select_statement(id_list_t* fields, char* table, condition_t* conds);
+insert_statement_t* new_insert_statement(char* table, num_list_t* values);
+create_table_statement_t* new_create_table_statement(char* table, id_list_t* columns);
+set_statement_t* new_set_statement(variable_t variable, int value);
+statement_t* new_statement(void);
 
 // CS-525 students don't need to ever call these
-void freeIdList(id_list_t *);
-void freeNumList(num_list_t*);
-void freeCondition(condition_t *);
-void freeSelectStatement(select_statement_t*);
-void freeInsertStatement(insert_statement_t*);
-void freeCreateStatement(create_statement_t*);
-void freeSetStatement(set_statement_t*);
+void free_id_list(id_list_t *);
+void free_num_list(num_list_t*);
+void free_condition(condition_t *);
+void free_select_statement(select_statement_t*);
+void free_insert_statement(insert_statement_t*);
+void free_create_table_statement(create_table_statement_t*);
+void free_set_statement(set_statement_t*);
 
 // the statement returned by parsing a single line of SQL
 extern statement_t* returned_statement;

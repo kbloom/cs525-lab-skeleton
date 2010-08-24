@@ -29,8 +29,8 @@ rate                 return RATE;
 drop		     return DROP;
 set                  return SET;
 timer                return TIMER;
-on                   {yylval.intVal = 1;  return BOOLEAN;}
-off                  {yylval.intVal = 0;  return BOOLEAN;}
+on                   {yylval.int_v = 1;  return BOOLEAN;}
+off                  {yylval.int_v = 0;  return BOOLEAN;}
 commit               return COMMIT;
 exit                 return EXIT;
 quit                 return EXIT;
@@ -39,14 +39,14 @@ quit                 return EXIT;
 ">"                  |
 "<="                 |
 ">="                 |
-"!="                 {yylval.stringVal = strdup(yytext); return OPERATOR;}
+"!="                 {yylval.string_v = strdup(yytext); return OPERATOR;}
 "("                  return *yytext;
 ")"                  return *yytext;
 ";"                  return *yytext;
 ","                  return *yytext;
 "*"		     return *yytext;
-[a-z][a-z0-9]*	     {yylval.stringVal = strdup(yytext); return IDENTIFIER;}
-[0-9]+               {yylval.intVal = atoi(yytext); return NUMBER;}
+[a-z][a-z0-9]*	     {yylval.string_v = strdup(yytext); return IDENTIFIER;}
+[0-9]+               {yylval.int_v = atoi(yytext); return NUMBER;}
 [ \t]                {}
 .                    {yyerror("Unknown Character");}
 

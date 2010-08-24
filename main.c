@@ -4,12 +4,11 @@
 #include "print.h"
 #include <stdio.h>
 
-
 int main(int argc, char** argv){
    char* input;
    statement_t* parsed=NULL;
    while ( (input = readline(">> ")) != 0 ){
-      parsed=parseStatement(input);
+      parsed=parse_statement(input);
       if (parsed){
 	 /* parse succeded. determine which command was run */
 	 if(parsed->select){
@@ -18,14 +17,14 @@ int main(int argc, char** argv){
 	 if(parsed->insert){
 	    printInsertStatement(parsed->insert);
 	 }
-	 if(parsed->createTable){
-	    printCreateStatement(parsed->createTable);
+	 if(parsed->create_table){
+	    printCreateStatement(parsed->create_table);
 	 }
-	 if(parsed->dropTable){
-	    printf("drop table %s;\n",parsed->dropTable);
+	 if(parsed->drop_table){
+	    printf("drop table %s;\n",parsed->drop_table);
 	 }
-	 if(parsed->printTable){
-	    printf("print table %s;\n",parsed->printTable);
+	 if(parsed->print_table){
+	    printf("print table %s;\n",parsed->print_table);
 	 }
 	 if(parsed->set){
 	    printSetStatement(parsed->set);
@@ -46,8 +45,8 @@ int main(int argc, char** argv){
 	 /* There was a syntax error, and the parser has already 
 	  * printed an error message, so nothing to do here.*/
       }
-      freeStatement(parsed);
+      free_statement(parsed);
       parsed=NULL;
    }
-   freeStatement(parsed);
+   free_statement(parsed);
 }
