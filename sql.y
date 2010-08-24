@@ -6,10 +6,7 @@ void yyerror(const char *);
 int yylex(void);
 %}
 
-%union{
-   char* stringVal;
-   int intVal;
-}
+%debug
 
 %token SELECT
 %token FROM
@@ -34,29 +31,32 @@ int yylex(void);
 %token <stringVal> IDENTIFIER
 %token <intVal> NUMBER
 
-%type <stringVal> ID_LIST
-%type <stringVal> S_FIELDS
+%union{
+   char* stringVal;
+   int intVal;
+}
+
 
 %start STATEMENT
 
 %%
 
-ID_LIST	    : IDENTIFIER  { $$ = "id_list_1" }
-            | IDENTIFIER ',' ID_LIST { $$ = "id_list_2" }
+ID_LIST	    : IDENTIFIER
+            | IDENTIFIER ',' ID_LIST
             ;
 NUM_LIST    : NUMBER
 	    | NUMBER ',' NUM_LIST
             ;
-CONDITION   : IDENTIFIER OPERATOR IDENTIFIER
+CONDITION   : IDENTIFIER OPERATOR IDENTIFIER		 
 	    | IDENTIFIER OPERATOR NUMBER
             ;
 COND_LIST   : CONDITION
 	    | CONDITION AND COND_LIST
 	    ;
-S_FIELDS    : ID_LIST {$$ = "s_fields" }
-	    | '*' { $$ = "s_fields_2"}
+S_FIELDS    : ID_LIST
+	    | '*'
             ;
-SELECT_S    : SELECT S_FIELDS FROM IDENTIFIER                   {abort(); printf("selectfrom %s\n", $4);}
+SELECT_S    : SELECT S_FIELDS FROM IDENTIFIER
 	    | SELECT S_FIELDS FROM IDENTIFIER WHERE COND_LIST
 	    ;
 INSERT_S    : INSERT INTO IDENTIFIER VALUES '(' NUM_LIST ')'
