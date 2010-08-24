@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define SQL_PARSER_INTERNAL
-#include "ast.h"
+#include "parser.h"
 void yyerror(const char *);
 int yylex(void);
 %}

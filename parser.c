@@ -1,5 +1,5 @@
 #define SQL_PARSER_INTERNAL
-#include "ast.h"
+#include "parser.h"
 #include <stdlib.h>
 #include <ctype.h>
 #include "sql.tab.h"

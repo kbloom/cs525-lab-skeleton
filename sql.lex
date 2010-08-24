@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "ast.h"
+#include "parser.h"
 #include "sql.tab.h"
 void yyerror(const char *);
 char *strdup(const char *s);

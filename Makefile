@@ -1,5 +1,5 @@
 CFLAGS=-g -std=c99
-parser:	sql.tab.o lex.yy.o main.o ast.o print.o
+parser:	sql.tab.o lex.yy.o main.o parser.o print.o
 	$(CC) $(CFLAGS) $^ -o parser -lreadline
 
 sql.tab.c sql.tab.h: sql.y
@@ -10,4 +10,4 @@ lex.yy.o: lex.yy.c sql.tab.h
 	$(CC) $(CFLAGS) -D_POSIX_SOURCE -c $<
 sql.tab.o: sql.tab.c sql.tab.h
 main.o: main.c sql.tab.h
-ast.o: ast.c ast.h
+parser.o: parser.c parser.h

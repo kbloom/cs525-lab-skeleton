@@ -1,6 +1,6 @@
 #ifndef PRINT_H
 #define PRINT_H
-#include "ast.h"
+#include "parser.h"
 
 #ifdef __cplusplus
 extern "C"{

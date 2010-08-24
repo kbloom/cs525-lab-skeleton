@@ -1,6 +1,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "ast.h"
+#include "parser.h"
 #include "print.h"
 #include <stdio.h>
 

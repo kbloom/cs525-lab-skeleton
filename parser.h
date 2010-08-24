@@ -1,5 +1,5 @@
-#ifndef AST_H
-#define AST_H
+#ifndef PARSER_H
+#define PARSER_H
 
 #ifdef __cplusplus
 extern "C"{
