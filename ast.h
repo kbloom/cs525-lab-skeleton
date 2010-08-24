@@ -1,6 +1,9 @@
 #ifndef AST_H
 #define AST_H
 
+#ifdef __cplusplus
+extern "C"{
+#endif
 /**
  * A singly linked-list of identifiers (either table names or column names)
  */
@@ -157,4 +160,7 @@ void freeSetStatement(set_statement_t*);
 extern statement_t* returned_statement;
 #endif
 
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 #endif
