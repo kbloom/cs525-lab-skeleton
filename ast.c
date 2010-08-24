@@ -19,6 +19,14 @@ int lengthNumList(const num_list_t *it){
    return i;
 }
 void freeStatement(statement_t* i){
+   if(!i) return;
+   freeSelectStatement(i->select);
+   freeCreateStatement(i->createTable);
+   freeInsertStatement(i->insert);
+   free(i->dropTable);
+   free(i->printTable);
+   freeSetStatement(i->set);
+   free(i);
 }
 statement_t * parseStatement(char * stmt){
 }
@@ -83,11 +91,55 @@ statement_t* newStatement(void){
    return i;
 }
 
-void freeIdList(id_list_t *);
-void freeNumList(num_list_t*);
-void freeCondition(condition_t *);
-void freeSelectStatement(select_statement_t*);
-void freeInsertStatement(insert_statement_t*);
-void freeCreateStatement(create_statement_t*);
-void freeSetStatement(set_statement_t*);
+void freeIdList(id_list_t *i){
+   id_list_t* temp;
+   while(i){
+      temp=i->next;
+      free(i->id);
+      free(i);
+      i=temp;
+   }
+}
+void freeNumList(num_list_t* i){
+   num_list_t* temp;
+   while(i){
+      temp=i->next;
+      free(i);
+      i=temp;
+   }
+}
+void freeCondition(condition_t * i){
+   num_list_t* temp;
+   while(i){
+      temp=i->next;
+      free(i->left_col);
+      free(i->op);
+      free(i->right_col);
+      free(i);
+      i=temp;
+   }
+}
+void freeSelectStatement(select_statement_t* i){
+   if(!i) return;
+   freeIdList(i->fields);
+   free(i->table);
+   freeCondition(i->conditions);
+   free(i)
+}
+void freeInsertStatement(insert_statement_t* i){
+   if(!i) return;
+   free(i->table);
+   freeNumList(i->values);
+   free(i);
+}
+void freeCreateStatement(create_statement_t* i){
+   if(!i) return;
+   free(i->table);
+   freeIdList(i->columns);
+   free(i);
+}
+void freeSetStatement(set_statement_t* i){
+   if(!i) return;
+   free(i);
+}
 
