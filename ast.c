@@ -28,7 +28,15 @@ void freeStatement(statement_t* i){
    freeSetStatement(i->set);
    free(i);
 }
-statement_t * parseStatement(char * stmt){
+statement_t * parseStatement(char * input){
+   char* t;
+   for (t=input;*t;++t) *t=tolower(*t);
+   yy_scan_string(input);
+   if (yyparse()==0)
+      return returned_statement;
+   else
+      return NULL;
+
 }
 
 
