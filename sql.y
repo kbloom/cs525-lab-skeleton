@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define SQL_PARSER_INTERNAL
 #include "ast.h"
 void yyerror(const char *);
 int yylex(void);
@@ -24,6 +25,7 @@ int yylex(void);
 %token HIT
 %token RATE
 %token SET
+%token DROP
 %token TIMER
 %token BOOLEAN
 %token COMMIT
@@ -49,7 +51,7 @@ int yylex(void);
 %type <conditionList> COND_LIST
 %type <idList> S_FIELDS
 %type <selectStatement> SELECT_S
-%type <createStatement> CREATE_S
+%type <createStatement> CREATE_T_S
 %type <insertStatement> INSERT_S
 
 
@@ -78,7 +80,9 @@ SELECT_S    : SELECT S_FIELDS FROM IDENTIFIER                   { $$ = newSelect
 	    ;
 INSERT_S    : INSERT INTO IDENTIFIER VALUES '(' NUM_LIST ')'    { $$ = newInsertStatement($3,$6) }
 	    ;
-CREATE_S    : CREATE TABLE IDENTIFIER '(' ID_LIST ')'           { $$ = newCreateStatement($3,$5) }
+CREATE_T_S  : CREATE TABLE IDENTIFIER '(' ID_LIST ')'           { $$ = newCreateStatement($3,$5) }
+	    ;
+DROP_T_S    : DROP TABLE IDENTIFIER
 	    ;
 PRINT_S     : PRINT CATALOG
 	    | PRINT BUFFER
@@ -91,7 +95,8 @@ SET_S       : SET VARIABLE BOOLEAN
 	    ;
 STATEMENT   : SELECT_S ';'
 	    | INSERT_S ';'
-	    | CREATE_S ';'
+	    | CREATE_T_S ';'
+	    | DROP_T_S ';'
             | PRINT_S ';'
             | SET_S ';'
             | COMMIT ';'

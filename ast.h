@@ -87,7 +87,7 @@ int lengthNum(num_t*);
 // CS-525 students don't need to ever call these
 id_t* newId(char* id);
 num_t* newNum(int num);
-condition_t* newCondition(char* left_col, char* op, char* right_col, char* num);
+condition_t* newCondition(char* left_col, char* op, char* right_col, int num);
 select_statement_t* newSelectStatement(id_t* fields, char* table, condition_t* conds);
 insert_statement_t* newInsertStatement(char* table, num_t* values);
 create_statement_t* newCreateStatement(char* table, id_t* columns);

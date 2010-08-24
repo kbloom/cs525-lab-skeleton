@@ -25,6 +25,7 @@ catalog              return CATALOG;
 buffer               return BUFFER;
 hit                  return HIT;
 rate                 return RATE;
+drop		     return DROP;
 set                  return SET;
 timer                return TIMER;
 on                   {yylval.intVal = 1;  return BOOLEAN;}
