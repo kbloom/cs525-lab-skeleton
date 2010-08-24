@@ -37,8 +37,8 @@ int yylex(void);
 %union{
    char* stringVal;
    int intVal;
-   struct id_t* idList;
-   struct num_t* numList;
+   struct id_list_t* idList;
+   struct num_list_t* numList;
    struct condition_t* conditionList;
    struct select_statement_t* selectStatement;
    struct create_statement_t* createStatement;
@@ -69,11 +69,11 @@ int yylex(void);
 
 %%
 
-ID_LIST	    : IDENTIFIER				        { $$ = newId($1)}
-            | IDENTIFIER ',' ID_LIST                            { $$ = newId($1); $$->next = $3}
+ID_LIST	    : IDENTIFIER				        { $$ = newIdList($1)}
+            | IDENTIFIER ',' ID_LIST                            { $$ = newIdList($1); $$->next = $3}
             ;
-NUM_LIST    : NUMBER					        { $$ = newNum($1)}
-	    | NUMBER ',' NUM_LIST                               { $$ = newNum($1); $$->next = $3}
+NUM_LIST    : NUMBER					        { $$ = newNumList($1)}
+	    | NUMBER ',' NUM_LIST                               { $$ = newNumList($1); $$->next = $3}
             ;
 CONDITION   : IDENTIFIER OPERATOR IDENTIFIER              	{ $$ = newCondition($1,$2,$3,0xDEADBEEF) }
 	    | IDENTIFIER OPERATOR NUMBER                        { $$ = newCondition($1,$2,NULL,$3) }

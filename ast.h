@@ -4,18 +4,18 @@
 /**
  * A singly linked-list of identifiers (either table names or column names)
  */
-typedef struct id_t{
+typedef struct id_list_t{
    char* id;
-   struct id_t* next;
-} id_t;
+   struct id_list_t* next;
+} id_list_t;
 
 /**
  * A singly-linked list of numbers.
  */
-typedef struct num_t{
+typedef struct num_list_t{
    int num;
-   struct num_t* next;
-} num_t;
+   struct num_list_t* next;
+} num_list_t;
 
 
 /**
@@ -43,7 +43,7 @@ typedef struct condition_t{
 typedef struct select_statement_t{
    /// a singly-linked list of the fields listed in the SELECT clause
    /// This will be NULL in SELECT * statements.
-   id_t* fields;
+   id_list_t* fields;
    /// the name of the table in the FROM clause
    char* table;
    /// a singly-linked list of the consitions in the WHERE clause.
@@ -59,7 +59,7 @@ typedef struct insert_statement_t{
    /// the name of the table to insert into
    char* table;
    /// a singly-list of the numbers to insert
-   num_t* values;
+   num_list_t* values;
 } insert_statement_t;
 
 
@@ -70,7 +70,7 @@ typedef struct create_statement_t{
    /// the name of the table to create
    char* table;
    /// a singly-list of column names
-   id_t* columns;
+   id_list_t* columns;
 } create_statement_t;
 
 /**
@@ -114,12 +114,12 @@ typedef struct statement_t{
 /**
  * Returns the length of an identifier list
  */
-int lengthId(const id_t *);
+int lengthIdList(const id_list_t *);
 
 /**
  * Returns the length of a list of numbers
  */
-int lengthNum(const num_t*);
+int lengthNumList(const num_list_t*);
 
 /**
  * Frees a parsed SQL statement, and all of the objects created inside it.
@@ -135,18 +135,18 @@ statement_t * parseStatement(char * stmt);
 
 #ifdef SQL_PARSER_INTERNAL
 // CS-525 students don't need to ever call these
-id_t* newId(char* id);
-num_t* newNum(int num);
+id_list_t* newIdList(char* id);
+num_list_t* newNumList(int num);
 condition_t* newCondition(char* left_col, char* op, char* right_col, int num);
-select_statement_t* newSelectStatement(id_t* fields, char* table, condition_t* conds);
-insert_statement_t* newInsertStatement(char* table, num_t* values);
-create_statement_t* newCreateStatement(char* table, id_t* columns);
+select_statement_t* newSelectStatement(id_list_t* fields, char* table, condition_t* conds);
+insert_statement_t* newInsertStatement(char* table, num_list_t* values);
+create_statement_t* newCreateStatement(char* table, id_list_t* columns);
 set_statement_t* newSetStatement(variable_t variable, int value);
 statement_t* newStatement(void);
 
 // CS-525 students don't need to ever call these
-void freeId(id_t *);
-void freeNum(num_t*);
+void freeIdList(id_list_t *);
+void freeNumList(num_list_t*);
 void freeCondition(condition_t *);
 void freeSelectStatement(select_statement_t*);
 void freeInsertStatement(insert_statement_t*);
