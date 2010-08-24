@@ -49,6 +49,7 @@ int yylex(void);
    struct statement_t* statement;
 }
 
+
 %type <idList> ID_LIST
 %type <numList> NUM_LIST
 %type <conditionList> CONDITION
@@ -63,6 +64,20 @@ int yylex(void);
 %type <stringVal> PRINT_T_S
 %type <parameterlessStatement> NOPARAM_S
 %type <statement> STATEMENT
+
+/* I'm not sure why this part doesn't compile.
+   If you can get this to compile, uncomment it to avoid memory leaks
+   when there are syntax errors in the parse.
+%destructor {free($$);} <stringVal>
+%destructor {freeIdList($$);} <idList>
+%destructor {freeNumList($$);} <numList>
+%destructor {freeCondition($$);} <conditionList>
+%destructor {freeSelectStatement(%%);} <selectStatement>
+%destructor {freeCreateStatement(%%);} <createStatement>
+%destructor {freeInsertStatement(%%);} <insertStatement>
+%destructor {freeSetStatement(%%);} <setStatement>
+%destructor {freeStatement(%%);} <statement>
+*/
 
 %start STATEMENT
 
@@ -105,13 +120,13 @@ NOPARAM_S   : PRINT CATALOG				        { $$ = CMD_PRINT_CATALOG }
 	    | COMMIT					        { $$ = CMD_COMMIT }
 	    | EXIT                                              { $$ = CMD_EXIT }
             ;
-STATEMENT   : SELECT_S ';'				        { returned_statement = newStatement(); returned_statement->select=$1;}
-	    | INSERT_S ';'                                      { returned_statement = newStatement(); returned_statement->insert=$1;}
-	    | CREATE_T_S ';'                                    { returned_statement = newStatement(); returned_statement->createTable=$1;}
-	    | DROP_T_S ';'                                      { returned_statement = newStatement(); returned_statement->dropTable=$1;}
-	    | PRINT_T_S ';'				        { returned_statement = newStatement(); returned_statement->printTable=$1;}
-            | SET_S ';'                                         { returned_statement = newStatement(); returned_statement->set=$1;}
-            | NOPARAM_S ';'                                     { returned_statement = newStatement(); returned_statement->parameterless=$1;}
+STATEMENT   : SELECT_S ';'				        { returned_statement = newStatement(); $$=returned_statement; returned_statement->select=$1;}
+	    | INSERT_S ';'                                      { returned_statement = newStatement(); $$=returned_statement; returned_statement->insert=$1;}
+	    | CREATE_T_S ';'                                    { returned_statement = newStatement(); $$=returned_statement; returned_statement->createTable=$1;}
+	    | DROP_T_S ';'                                      { returned_statement = newStatement(); $$=returned_statement; returned_statement->dropTable=$1;}
+	    | PRINT_T_S ';'				        { returned_statement = newStatement(); $$=returned_statement; returned_statement->printTable=$1;}
+            | SET_S ';'                                         { returned_statement = newStatement(); $$=returned_statement; returned_statement->set=$1;}
+            | NOPARAM_S ';'                                     { returned_statement = newStatement(); $$=returned_statement; returned_statement->parameterless=$1;}
 	    ;
 %%
 
