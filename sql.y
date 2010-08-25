@@ -27,7 +27,13 @@ int yylex(void);
 %token SET
 %token DROP
 %token TIMER
-%token <int_v> BOOLEAN
+%token INDEX
+%token NO
+%token DUPLICATES
+%token OF
+%token ON
+%token OFF
+%token DEBUG
 %token COMMIT
 %token EXIT
 %token <operator_v> OPERATOR
@@ -51,6 +57,7 @@ int yylex(void);
 }
 
 
+%type <int_v> BOOLEAN
 %type <id_list> ID_LIST
 %type <num_list> NUM_LIST
 %type <condition> CONDITION
@@ -107,11 +114,24 @@ INSERT_S    : INSERT INTO IDENTIFIER VALUES '(' NUM_LIST ')'    { $$ = new_inser
 	    ;
 CREATE_T_S  : CREATE TABLE IDENTIFIER '(' ID_LIST ')'           { $$ = new_create_table_statement($3,$5) }
 	    ;
+CREATE_I_S  : CREATE INDEX IDENTIFIER ON IDENTIFIER '(' IDENTIFIER ')'
+	                                                        {}
+            | CREATE INDEX IDENTIFIER ON IDENTIFIER '(' IDENTIFIER ')' NO DUPLICATES
+	                                                        {}
+	    ;
 DROP_T_S    : DROP TABLE IDENTIFIER                             { $$ = $3 }
+	    ;
+DROP_I_S    : DROP INDEX IDENTIFIER OF TABLE IDENTIFIER         {}
 	    ;
 PRINT_T_S   : PRINT TABLE IDENTIFIER			        { $$ = $3 }
 	    ;
+PRINT_I_S   : PRINT INDEX IDENTIFIER OF TABLE IDENTIFIER        {}
+	    ;
 VARIABLE    : TIMER					        { $$ = CONFIG_TIMER }
+	    | INDEX DEBUG                                       {}
+	    ;
+BOOLEAN     : ON					        { $$ = 1 }
+	    | OFF                                               { $$ = 0 }
 	    ;
 SET_S       : SET VARIABLE BOOLEAN			        { $$ = new_set_statement($2,$3) }
 	    ;

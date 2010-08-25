@@ -29,8 +29,13 @@ rate                 return RATE;
 drop		     return DROP;
 set                  return SET;
 timer                return TIMER;
-on                   {yylval.int_v = 1;  return BOOLEAN;}
-off                  {yylval.int_v = 0;  return BOOLEAN;}
+index		     return INDEX;
+no                   return NO;
+duplicates           return DUPLICATES;
+of		     return OF;
+on                   return ON;
+off                  return OFF;
+debug		     return DEBUG;
 commit               return COMMIT;
 exit                 return EXIT;
 quit                 return EXIT;
