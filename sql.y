@@ -48,7 +48,9 @@ int yylex(void);
    enum operator_t operator_v;
    struct condition_t* condition;
    struct select_statement_t* select_statement;
-   struct create_table_statement_t* create_statement;
+   struct create_table_statement_t* create_table_statement;
+   struct create_index_statement_t* create_index_statement;
+   struct index_ref_t* index_ref;
    struct insert_statement_t* insert_statement;
    enum variable_t variable;
    struct set_statement_t* set_statement;
@@ -64,10 +66,13 @@ int yylex(void);
 %type <condition> COND_LIST
 %type <id_list> S_FIELDS
 %type <select_statement> SELECT_S
-%type <create_statement> CREATE_T_S
+%type <create_table_statement> CREATE_T_S
+%type <create_index_statement> CREATE_I_S
 %type <insert_statement> INSERT_S
 %type <variable> VARIABLE
 %type <set_statement> SET_S
+%type <index_ref> DROP_I_S
+%type <index_ref> PRINT_I_S
 %type <string_v> DROP_T_S
 %type <string_v> PRINT_T_S
 %type <parameterless_statement> NOPARAM_S
@@ -81,7 +86,7 @@ int yylex(void);
 %destructor {free_num_list($$);} <num_list>
 %destructor {free_condition($$);} <condition>
 %destructor {free_select_statement(%%);} <select_statement>
-%destructor {free_create_table_statement(%%);} <create_statement>
+%destructor {free_create_table_statement(%%);} <create_table_statement>
 %destructor {free_insert_statement(%%);} <insert_statement>
 %destructor {free_set_statement(%%);} <set_statement>
 %destructor {free_statement(%%);} <statement>
@@ -115,20 +120,20 @@ INSERT_S    : INSERT INTO IDENTIFIER VALUES '(' NUM_LIST ')'    { $$ = new_inser
 CREATE_T_S  : CREATE TABLE IDENTIFIER '(' ID_LIST ')'           { $$ = new_create_table_statement($3,$5) }
 	    ;
 CREATE_I_S  : CREATE INDEX IDENTIFIER ON IDENTIFIER '(' IDENTIFIER ')'
-	                                                        {}
+	                                                        { $$ = new_create_index_statement($3,$5,$7,1) }
             | CREATE INDEX IDENTIFIER ON IDENTIFIER '(' IDENTIFIER ')' NO DUPLICATES
-	                                                        {}
+	                                                        { $$ = new_create_index_statement($3,$5,$7,0 )}
 	    ;
 DROP_T_S    : DROP TABLE IDENTIFIER                             { $$ = $3 }
 	    ;
-DROP_I_S    : DROP INDEX IDENTIFIER OF TABLE IDENTIFIER         {}
+DROP_I_S    : DROP INDEX IDENTIFIER OF TABLE IDENTIFIER         { $$ = new_index_ref($3,$6) }
 	    ;
 PRINT_T_S   : PRINT TABLE IDENTIFIER			        { $$ = $3 }
 	    ;
-PRINT_I_S   : PRINT INDEX IDENTIFIER OF TABLE IDENTIFIER        {}
+PRINT_I_S   : PRINT INDEX IDENTIFIER OF TABLE IDENTIFIER        { $$ = new_index_ref($3,$6) }
 	    ;
 VARIABLE    : TIMER					        { $$ = CONFIG_TIMER }
-	    | INDEX DEBUG                                       {}
+	    | INDEX DEBUG                                       { $$ = CONFIG_INDEX_DEBUG}
 	    ;
 BOOLEAN     : ON					        { $$ = 1 }
 	    | OFF                                               { $$ = 0 }
@@ -144,6 +149,9 @@ NOPARAM_S   : PRINT CATALOG				        { $$ = CMD_PRINT_CATALOG }
 STATEMENT   : SELECT_S ';'				        { returned_statement = new_statement(); $$=returned_statement; returned_statement->select=$1;}
 	    | INSERT_S ';'                                      { returned_statement = new_statement(); $$=returned_statement; returned_statement->insert=$1;}
 	    | CREATE_T_S ';'                                    { returned_statement = new_statement(); $$=returned_statement; returned_statement->create_table=$1;}
+	    | CREATE_I_S ';'                                    { returned_statement = new_statement(); $$=returned_statement; returned_statement->create_index=$1;}
+	    | DROP_I_S ';'                                      { returned_statement = new_statement(); $$=returned_statement; returned_statement->drop_index=$1;}
+	    | PRINT_I_S ';'				        { returned_statement = new_statement(); $$=returned_statement; returned_statement->print_index=$1;}
 	    | DROP_T_S ';'                                      { returned_statement = new_statement(); $$=returned_statement; returned_statement->drop_table=$1;}
 	    | PRINT_T_S ';'				        { returned_statement = new_statement(); $$=returned_statement; returned_statement->print_table=$1;}
             | SET_S ';'                                         { returned_statement = new_statement(); $$=returned_statement; returned_statement->set=$1;}
