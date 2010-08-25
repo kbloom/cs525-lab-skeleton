@@ -30,7 +30,10 @@ void free_statement(statement_t* i){
    if(!i) return;
    free_select_statement(i->select);
    free_create_table_statement(i->create_table);
+   free_create_index_statement(i->create_index);
    free_insert_statement(i->insert);
+   free_index_ref(i->drop_index);
+   free_index_ref(i->print_index);
    free(i->drop_table);
    free(i->print_table);
    free_set_statement(i->set);
