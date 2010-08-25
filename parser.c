@@ -88,11 +88,12 @@ create_table_statement_t* new_create_table_statement(char* table, id_list_t* col
    i->columns=columns;
    return i;
 }
-create_index_statement_t* new_create_index_statement(char* index, char* table, char* column){
+create_index_statement_t* new_create_index_statement(char* index, char* table, char* column, int duplicates){
    create_index_statement_t* i=malloc(sizeof(create_index_statement_t));
    i->index=index;
    i->table=table;
    i->column=column;
+   i->duplicates=duplicates;
    return i;
 }
 index_ref_t* new_index_ref(char* index, char* table){

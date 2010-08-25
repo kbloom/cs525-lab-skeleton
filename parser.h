@@ -83,6 +83,7 @@ typedef struct create_index_statement_t{
    char* index;
    char* table;
    char* column;
+   int duplicates;
 } create_index_statement_t;
 
 typedef struct index_ref_t{
@@ -162,7 +163,7 @@ condition_t* new_condition(char* left_col, operator_t op, char* right_col, int n
 select_statement_t* new_select_statement(id_list_t* fields, char* table, condition_t* conds);
 insert_statement_t* new_insert_statement(char* table, num_list_t* values);
 create_table_statement_t* new_create_table_statement(char* table, id_list_t* columns);
-create_index_statement_t* new_create_index_statement(char* index, char* table, char* column);
+create_index_statement_t* new_create_index_statement(char* index, char* table, char* column, int duplicates);
 index_ref_t* new_index_ref(char* index, char* table);
 set_statement_t* new_set_statement(variable_t variable, int value);
 statement_t* new_statement(void);
