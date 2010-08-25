@@ -88,6 +88,19 @@ create_table_statement_t* new_create_table_statement(char* table, id_list_t* col
    i->columns=columns;
    return i;
 }
+create_index_statement_t* new_create_index_statement(char* index, char* table, char* column){
+   create_index_statement_t* i=malloc(sizeof(create_index_statement_t));
+   i->index=index;
+   i->table=table;
+   i->column=column;
+   return i;
+}
+index_ref_t* new_index_ref(char* index, char* table){
+   index_ref_t* i=malloc(sizeof(index_ref_t));
+   i->index=index;
+   i->table=table;
+   return i;
+}
 set_statement_t* new_set_statement(variable_t variable, int value){
    set_statement_t* i=malloc(sizeof(set_statement_t));
    i->variable=variable;
@@ -98,9 +111,12 @@ statement_t* new_statement(void){
    statement_t* i=malloc(sizeof(statement_t));
    i->select=NULL;
    i->create_table=NULL;
+   i->create_index=NULL;
    i->insert=NULL;
    i->drop_table=NULL;   
+   i->drop_index=NULL;
    i->print_table=NULL;
+   i->print_index=NULL;
    i->set=NULL;
    i->parameterless=CMD_NONE;
    return i;
@@ -150,6 +166,19 @@ void free_create_table_statement(create_table_statement_t* i){
    if(!i) return;
    free(i->table);
    free_id_list(i->columns);
+   free(i);
+}
+void free_create_index_statement(create_index_statement_t* i){
+   if(!i) return;
+   free(i->index);
+   free(i->table);
+   free(i->column);
+   free(i);
+}
+void free_index_ref(index_ref_t* i){
+   if(!i) return;
+   free(i->index);
+   free(i->table);
    free(i);
 }
 void free_set_statement(set_statement_t* i){

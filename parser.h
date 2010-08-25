@@ -79,6 +79,17 @@ typedef struct create_table_statement_t{
    id_list_t* columns;
 } create_table_statement_t;
 
+typedef struct create_index_statement_t{
+   char* index;
+   char* table;
+   char* column;
+} create_index_statement_t;
+
+typedef struct index_ref_t{
+   char* index;
+   char* table;
+} index_ref_t;
+
 /**
  *  This enum defines a bunch of commands that take no parameters.
  *  If the parser found some command not listed here, then the type
@@ -95,7 +106,8 @@ typedef enum parameterless_statement_t{
 } parameterless_statement_t;
 
 typedef enum variable_t{
-   CONFIG_TIMER
+   CONFIG_TIMER,
+   CONFIG_INDEX_DEBUG
 } variable_t;
 
 
@@ -109,9 +121,12 @@ typedef struct set_statement_t{
 typedef struct statement_t{
    select_statement_t* select;
    create_table_statement_t* create_table;
+   create_index_statement_t* create_index;
    insert_statement_t* insert;
    char* drop_table;   
+   index_ref_t* drop_index;
    char* print_table;
+   index_ref_t* print_index;
    set_statement_t* set;
    parameterless_statement_t parameterless;
 } statement_t;
@@ -147,6 +162,8 @@ condition_t* new_condition(char* left_col, operator_t op, char* right_col, int n
 select_statement_t* new_select_statement(id_list_t* fields, char* table, condition_t* conds);
 insert_statement_t* new_insert_statement(char* table, num_list_t* values);
 create_table_statement_t* new_create_table_statement(char* table, id_list_t* columns);
+create_index_statement_t* new_create_index_statement(char* index, char* table, char* column);
+index_ref_t* new_index_ref(char* index, char* table);
 set_statement_t* new_set_statement(variable_t variable, int value);
 statement_t* new_statement(void);
 
@@ -157,6 +174,8 @@ void free_condition(condition_t *);
 void free_select_statement(select_statement_t*);
 void free_insert_statement(insert_statement_t*);
 void free_create_table_statement(create_table_statement_t*);
+void free_create_index_statement(create_index_statement_t*);
+void free_index_ref(index_ref_t*);
 void free_set_statement(set_statement_t*);
 
 // the statement returned by parsing a single line of SQL
