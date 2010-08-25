@@ -30,7 +30,7 @@ int yylex(void);
 %token <int_v> BOOLEAN
 %token COMMIT
 %token EXIT
-%token <string_v> OPERATOR
+%token <operator_v> OPERATOR
 %token <string_v> IDENTIFIER
 %token <int_v> NUMBER
 
@@ -39,6 +39,7 @@ int yylex(void);
    int int_v;
    struct id_list_t* id_list;
    struct num_list_t* num_list;
+   enum operator_t operator_v;
    struct condition_t* condition;
    struct select_statement_t* select_statement;
    struct create_table_statement_t* create_statement;

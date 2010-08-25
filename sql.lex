@@ -34,12 +34,7 @@ off                  {yylval.int_v = 0;  return BOOLEAN;}
 commit               return COMMIT;
 exit                 return EXIT;
 quit                 return EXIT;
-"<"                  |
-"="                  |
-">"                  |
-"<="                 |
-">="                 |
-"!="                 {yylval.string_v = strdup(yytext); return OPERATOR;}
+"="                  {yylval.operator_v = OP_EQUAL; return OPERATOR;}
 "("                  return *yytext;
 ")"                  return *yytext;
 ";"                  return *yytext;

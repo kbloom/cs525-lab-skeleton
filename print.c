@@ -17,7 +17,10 @@ void printNumList(num_list_t* i){
 }
 void printCondition(condition_t* i){
    while(i){
-      printf("%s %s", i->left_col, i->op);
+      printf("%s ", i->left_col);
+      switch(i->op){
+	 case OP_EQUAL: printf("="); break;
+      }
       if (i->right_col)
 	 printf (" %s", i->right_col);
       else

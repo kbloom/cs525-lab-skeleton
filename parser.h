@@ -20,6 +20,9 @@ typedef struct num_list_t{
    struct num_list_t* next;
 } num_list_t;
 
+typedef enum operator_t{
+   OP_EQUAL
+} operator_t;
 
 /**
  * This is a linked list of conditions in the WHERE clause
@@ -31,7 +34,7 @@ typedef struct num_list_t{
  */
 typedef struct condition_t{
    char* left_col;
-   char* op;
+   operator_t op;
    char* right_col;
    int right_num;
    struct condition_t* next;
@@ -91,11 +94,11 @@ typedef enum parameterless_statement_t{
    CMD_EXIT
 } parameterless_statement_t;
 
-enum variable_t{
+typedef enum variable_t{
    CONFIG_TIMER
-};
+} variable_t;
 
-typedef enum variable_t variable_t;
+
 
 typedef struct set_statement_t{
    variable_t variable;
@@ -140,7 +143,7 @@ statement_t * parse_statement(char * stmt);
 // CS-525 students don't need to ever call these
 id_list_t* new_id_list(char* id);
 num_list_t* new_num_list(int num);
-condition_t* new_condition(char* left_col, char* op, char* right_col, int num);
+condition_t* new_condition(char* left_col, operator_t op, char* right_col, int num);
 select_statement_t* new_select_statement(id_list_t* fields, char* table, condition_t* conds);
 insert_statement_t* new_insert_statement(char* table, num_list_t* values);
 create_table_statement_t* new_create_table_statement(char* table, id_list_t* columns);

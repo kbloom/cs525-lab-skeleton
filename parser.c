@@ -60,7 +60,7 @@ num_list_t* new_num_list(int num){
    i->next=NULL;
    return i;
 }
-condition_t* new_condition(char* left_col, char* op, char* right_col, int right_num){
+condition_t* new_condition(char* left_col, operator_t op, char* right_col, int right_num){
    condition_t* i=malloc(sizeof(condition_t));
    i->left_col=left_col;
    i->op=op;
@@ -128,7 +128,6 @@ void free_condition(condition_t * i){
    while(i){
       temp=i->next;
       free(i->left_col);
-      free(i->op);
       free(i->right_col);
       free(i);
       i=temp;
