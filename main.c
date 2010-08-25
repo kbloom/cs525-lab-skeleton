@@ -25,13 +25,29 @@ int main(int argc, char** argv){
 	    printInsertStatement(parsed->insert);
 	 }
 	 if(parsed->create_table){
-	    printCreateStatement(parsed->create_table);
+	    printCreateTableStatement(parsed->create_table);
+	 }
+	 if(parsed->create_index){
+	    printf("create index %s on %s (%s);\n",
+		  parsed->create_index->index,
+		  parsed->create_index->table,
+		  parsed->create_index->column);
 	 }
 	 if(parsed->drop_table){
 	    printf("drop table %s;\n",parsed->drop_table);
 	 }
+	 if(parsed->drop_index){
+	    printf("drop index %s of table %s;\n",
+		  parsed->drop_index->index,
+		  parsed->drop_index->table);
+	 }
 	 if(parsed->print_table){
 	    printf("print table %s;\n",parsed->print_table);
+	 }
+	 if(parsed->print_index){
+	    printf("print index %s of table %s;\n",
+		  parsed->print_index->index,
+		  parsed->print_index->table);
 	 }
 	 if(parsed->set){
 	    printSetStatement(parsed->set);

@@ -48,7 +48,7 @@ void printInsertStatement(insert_statement_t* i){
    printf(");\n");
    
 }
-void printCreateStatement(create_table_statement_t* i){
+void printCreateTableStatement(create_table_statement_t* i){
    printf("create table %s (", i->table);
    printIdList(i->columns);
    printf(");\n");
@@ -57,6 +57,7 @@ void printSetStatement(set_statement_t* i){
    printf("set ");
    switch (i->variable){
       case CONFIG_TIMER: printf("timer "); break;
+      case CONFIG_INDEX_DEBUG: printf("index debug "); break;
    }
    printf("%s;\n", i->value ? "on" : "off" );
 }
