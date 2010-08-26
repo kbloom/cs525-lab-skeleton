@@ -1,21 +1,21 @@
 #include "print.h"
 #include "stdio.h"
 
-void printIdList(id_list_t* i){
+void print_id_list(id_list_t* i){
    while(i){
       printf("%s",i->id);
       if (i->next) printf(", ");
       i=i->next;
    }
 }
-void printNumList(num_list_t* i){
+void print_num_list(num_list_t* i){
    while(i){
       printf("%d",i->num);
       if (i->next) printf(", ");
       i=i->next;
    }
 }
-void printCondition(condition_t* i){
+void print_condition(condition_t* i){
    while(i){
       printf("%s ", i->left_col);
       switch(i->op){
@@ -29,31 +29,31 @@ void printCondition(condition_t* i){
       i=i->next;
    }
 }
-void printSelectStatement(select_statement_t* i){
+void print_select_statement(select_statement_t* i){
    printf("select ");
    if(i->fields)
-      printIdList(i->fields);
+      print_id_list(i->fields);
    else
       printf("*");
    printf(" from %s",i->table);
    if (i->conditions){
       printf(" where ");
-      printCondition(i->conditions);
+      print_condition(i->conditions);
    }
    printf(";\n");
 }
-void printInsertStatement(insert_statement_t* i){
+void print_insert_statement(insert_statement_t* i){
    printf("insert into %s values (", i->table);
-   printNumList(i->values);
+   print_num_list(i->values);
    printf(");\n");
    
 }
-void printCreateStatement(create_table_statement_t* i){
+void print_create_table_statement(create_table_statement_t* i){
    printf("create table %s (", i->table);
-   printIdList(i->columns);
+   print_id_list(i->columns);
    printf(");\n");
 }
-void printSetStatement(set_statement_t* i){
+void print_set_statement(set_statement_t* i){
    printf("set ");
    switch (i->variable){
       case CONFIG_TIMER: printf("timer "); break;

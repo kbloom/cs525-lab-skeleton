@@ -7,13 +7,13 @@ extern "C"{
 #endif
 
 
-void printIdList(id_list_t* i);
-void printNumList(num_list_t* i);
-void printCondition(condition_t* i);
-void printSelectStatement(select_statement_t* i);
-void printInsertStatement(insert_statement_t* i);
-void printCreateStatement(create_table_statement_t* i);
-void printSetStatement(set_statement_t* i);
+void print_id_list(id_list_t* i);
+void print_num_list(num_list_t* i);
+void print_condition(condition_t* i);
+void print_select_statement(select_statement_t* i);
+void print_insert_statement(insert_statement_t* i);
+void print_create_table_statement(create_table_statement_t* i);
+void print_set_statement(set_statement_t* i);
 
 #ifdef __cplusplus
 }

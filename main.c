@@ -19,13 +19,13 @@ int main(int argc, char** argv){
       if (parsed){
 	 /* parse succeded. determine which command was run */
 	 if(parsed->select){
-	    printSelectStatement(parsed->select);
+	    print_select_statement(parsed->select);
 	 }
 	 if(parsed->insert){
-	    printInsertStatement(parsed->insert);
+	    print_insert_statement(parsed->insert);
 	 }
 	 if(parsed->create_table){
-	    printCreateStatement(parsed->create_table);
+	    print_create_table_statement(parsed->create_table);
 	 }
 	 if(parsed->drop_table){
 	    printf("drop table %s;\n",parsed->drop_table);
@@ -34,7 +34,7 @@ int main(int argc, char** argv){
 	    printf("print table %s;\n",parsed->print_table);
 	 }
 	 if(parsed->set){
-	    printSetStatement(parsed->set);
+	    print_set_statement(parsed->set);
 	 }
 	 if(parsed->parameterless == CMD_PRINT_CATALOG)
 	    printf("print catalog;\n");
