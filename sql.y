@@ -84,8 +84,10 @@ int yylex(void);
 %destructor {free_condition($$);} <condition>
 %destructor {free_select_statement($$);} <select_statement>
 %destructor {free_create_table_statement($$);} <create_table_statement>
+%destructor {free_create_index_statement($$);} <create_index_statement>
 %destructor {free_insert_statement($$);} <insert_statement>
 %destructor {free_set_statement($$);} <set_statement>
+%destructor {free_index_ref($$);} <index_ref>
 %destructor {free_statement($$);} <statement>
 
 %start STATEMENT
