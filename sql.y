@@ -66,19 +66,15 @@ int yylex(void);
 %type <parameterless_statement> NOPARAM_S
 %type <statement> STATEMENT
 
-/* I'm not sure why this part doesn't compile.
-   If you can get this to compile, uncomment it to avoid memory leaks
-   when there are syntax errors in the parse.
 %destructor {free($$);} <string_v>
 %destructor {free_id_list($$);} <id_list>
 %destructor {free_num_list($$);} <num_list>
 %destructor {free_condition($$);} <condition>
-%destructor {free_select_statement(%%);} <select_statement>
-%destructor {free_create_table_statement(%%);} <create_statement>
-%destructor {free_insert_statement(%%);} <insert_statement>
-%destructor {free_set_statement(%%);} <set_statement>
-%destructor {free_statement(%%);} <statement>
-*/
+%destructor {free_select_statement($$);} <select_statement>
+%destructor {free_create_table_statement($$);} <create_statement>
+%destructor {free_insert_statement($$);} <insert_statement>
+%destructor {free_set_statement($$);} <set_statement>
+%destructor {free_statement($$);} <statement>
 
 %start STATEMENT
 
