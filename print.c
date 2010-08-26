@@ -60,3 +60,35 @@ void print_set_statement(set_statement_t* i){
    }
    printf("%s;\n", i->value ? "on" : "off" );
 }
+void dispatch_print(statement_t* parsed){
+	 /* parse succeded. determine which command was run */
+	 if(parsed->select){
+	    print_select_statement(parsed->select);
+	 }
+	 if(parsed->insert){
+	    print_insert_statement(parsed->insert);
+	 }
+	 if(parsed->create_table){
+	    print_create_table_statement(parsed->create_table);
+	 }
+	 if(parsed->drop_table){
+	    printf("drop table %s;\n",parsed->drop_table);
+	 }
+	 if(parsed->print_table){
+	    printf("print table %s;\n",parsed->print_table);
+	 }
+	 if(parsed->set){
+	    print_set_statement(parsed->set);
+	 }
+	 if(parsed->parameterless == CMD_PRINT_CATALOG)
+	    printf("print catalog;\n");
+	 if(parsed->parameterless == CMD_PRINT_BUFFER)
+	    printf("print buffer;\n");
+	 if(parsed->parameterless == CMD_PRINT_HIT_RATE)
+	    printf("print hit rate;\n");
+	 if(parsed->parameterless == CMD_COMMIT)
+	    printf("commit;\n");
+	 if(parsed->parameterless == CMD_EXIT){
+	    printf("exit;\n");
+	 }
+}
