@@ -88,7 +88,6 @@ int yylex(void);
 %destructor {free_insert_statement($$);} <insert_statement>
 %destructor {free_set_statement($$);} <set_statement>
 %destructor {free_index_ref($$);} <index_ref>
-%destructor {free_statement($$);} <statement>
 
 %start STATEMENT
 
