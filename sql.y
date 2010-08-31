@@ -74,7 +74,6 @@ int yylex(void);
 %destructor {free_create_table_statement($$);} <create_statement>
 %destructor {free_insert_statement($$);} <insert_statement>
 %destructor {free_set_statement($$);} <set_statement>
-%destructor {free_statement($$);} <statement>
 
 %start STATEMENT
 
