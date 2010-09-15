@@ -1,6 +1,12 @@
 CFLAGS=-g -std=c99
+LDFLAGS=
+LDLIBS=
+
+#if any part of your program is in C++ then
+#comment the $(CC) line and uncomment the $(CXX) line
 dbms:	sql.tab.o lex.yy.o main.o parser.o print.o
-	$(CC) $(CFLAGS) $^ -o dbms
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o dbms
+	#$(CXX) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o dbms
 
 sql.tab.c sql.tab.h: sql.y
 	bison --defines sql.y
