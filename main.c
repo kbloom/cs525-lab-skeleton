@@ -3,6 +3,10 @@
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
+#include <time.h>
+
+time_t now();
 
 //consider using the GNU Readline library instead of myreadline()
 //it has a similar interface, and you'll get nice features like working
@@ -14,9 +18,11 @@ int main(int argc, char** argv){
    char* input=NULL;
    statement_t* parsed=NULL;
    int stillrunning=1;
+   int timing=0;
    while (stillrunning &&  (input=myreadline(">> ")) != 0){
       parsed=parse_statement(input);
       if (parsed){
+	 time_t begintime=now();
 	 /*
 	  * dispatch_print is an example of how to work with the AST to detect
 	  * and run the various commands, as well as how to get at all of the
@@ -25,9 +31,14 @@ int main(int argc, char** argv){
 	  * (You can use the functions in print.c for debugging purposes)
 	  */
 	 dispatch_print(parsed);
+	 if(parsed->set && parsed->set->variable == CONFIG_TIMER)
+	    timing = parsed->set->value;
 	 if(parsed->parameterless == CMD_EXIT){
 	    stillrunning=0;
 	 }
+	 time_t endtime=now();
+	 if (timing)
+	    printf("Elapsed time: %dus\n", endtime-begintime);
       }else{
 	 /* There was a syntax error, and the parser has already 
 	  * printed an error message, so nothing to do here.*/
@@ -47,3 +58,8 @@ char* myreadline(char* prompt){
       return input;
 }
 
+time_t now(){
+   struct timeval t;
+   gettimeofday(&t,0);
+   return t.tv_sec*1000000+t.tv_usec;
+}
