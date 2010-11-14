@@ -40,6 +40,11 @@ commit               return COMMIT;
 exit                 return EXIT;
 quit                 return EXIT;
 "="                  {yylval.operator_v = OP_EQUAL; return OPERATOR;}
+"<"                  {yylval.operator_v = OP_LESS; return OPERATOR;}
+"<="                 {yylval.operator_v = OP_LESS_EQUAL; return OPERATOR;}
+">"                  {yylval.operator_v = OP_GREATER; return OPERATOR;}
+">="                 {yylval.operator_v = OP_GREATER_EQUAL; return OPERATOR;}
+"!="                 {yylval.operator_v = OP_NOT_EQUAL; return OPERATOR;}
 "("                  return *yytext;
 ")"                  return *yytext;
 ";"                  return *yytext;

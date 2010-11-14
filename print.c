@@ -20,6 +20,11 @@ void print_condition(condition_t* i){
       printf("%s ", i->left_col);
       switch(i->op){
 	 case OP_EQUAL: printf("="); break;
+	 case OP_LESS: printf("<"); break;
+	 case OP_LESS_EQUAL: printf("<="); break;
+	 case OP_GREATER: printf(">"); break;
+	 case OP_GREATER_EQUAL: printf(">="); break;
+	 case OP_NOT_EQUAL: printf("!="); break;
       }
       if (i->right_col)
 	 printf (" %s", i->right_col);

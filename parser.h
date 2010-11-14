@@ -21,7 +21,12 @@ typedef struct num_list_t{
 } num_list_t;
 
 typedef enum operator_t{
-   OP_EQUAL
+   OP_EQUAL,
+   OP_LESS,
+   OP_LESS_EQUAL,
+   OP_GREATER,
+   OP_GREATER_EQUAL,
+   OP_NOT_EQUAL
 } operator_t;
 
 /**
